@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">MyFirstApplication</string>
+    <string name="text_name">Insérez votre prénom.</string>
+    <string name="text_last_name">Insérez votre nom de famille.</string>
+    <string name="text_birth_date">Insérez votre date de naissance.</string>
+    <string name="text_birth_city">Insérez votre ville de naissance.</string>
+    <string name="preview_name">Martin</string>
+    <string name="preview_last_name">Dupuis</string>
+    <string name="preview_birth_date">JJ/MM/AAAA</string>
+    <string name="preview_birth_city">Paris, France</string>
+    <string name="validate">Valider</string>
+    <string name="summary">Résumé de vos informations :</string>
+    <string name="reset_action">Recommencer</string>
+    <string name="button_tel">Je souhaite renseigner mon numéro de téléphone.</string>
+    <string name="preview_phone">06 12 34 56 78</string>
+    <string name="text_department">Sélectionnez votre département de naissance.</string>
+    <string name="delete_phone">Supprimer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Bonjour ceci est un fragment vide</string>
+    <string name="fragment_text">Avez-vous un commentaire ?</string>
+    <string name="fragment_button">Valider</string>
+    <string name="wiki">Wiki</string>
+    <string name="return_wiki">Retour</string>
+    <string name="share">Partager</string>
+    <string name="go_display">Sortir</string>
+    <string name="date_button">Changer ma date de naissance</string>
+    <string name="call_button">Appeler</string>
+    <string name="textTel1">Numéro de téléphone 1 :</string>
+    <string name="textTel2">Numéro de téléphone 2 :</string>
+    <string name="textTel3">Numéro de téléphone 3 :</string>
+</resources>

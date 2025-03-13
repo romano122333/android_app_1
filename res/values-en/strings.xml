@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MyFirstApplication</string>
+    <string name="text_name">Insert your first name.</string>
+    <string name="text_last_name">Insert your last name.</string>
+    <string name="text_birth_date">Insert your birth date.</string>
+    <string name="text_birth_city">Insert your birth cty.</string>
+    <string name="preview_name">John</string>
+    <string name="preview_last_name">Doe</string>
+    <string name="preview_birth_date">DD/MM/YYYY</string>
+    <string name="preview_birth_city">London, United Kingdom</string>
+    <string name="validate">Enter</string>
+    <string name="summary">Your info\'s summary:</string>
+    <string name="reset_action">Restart</string>
+    <string name="button_tel">I wish to insert my phone number</string>
+    <string name="preview_phone">0 123 54678</string>
+    <string name="text_department">Select your birth\'s department.</string>
+    <string name="delete_phone">Delete</string>
+    <string name="hello_blank_fragment">Hello this is a blank fragment</string>
+    <string name="fragment_text">Any comments?</string>
+    <string name="fragment_button">Enter</string>
+    <string name="wiki">Wiki</string>
+    <string name="return_wiki">Go back</string>
+    <string name="share">Share</string>
+    <string name="go_display">Exit</string>
+    <string name="date_button">Change my birth date</string>
+    <string name="call_button">Call</string>
+    <string name="textTel1">Phone number 1:</string>
+    <string name="textTel2">Phone number 2:</string>
+    <string name="textTel3">Phone number 3:</string>
+</resources>
