@@ -15,12 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.snackbar.Snackbar;
+
 public class MainActivity extends AppCompatActivity implements MainFragment.OnVal,
         MainFragment.OnExit,
         MainFragment.OnDate,
         DisplayFragment.OnEdit,
         DateFragment.OnSendDate,
-        DateFragment.OnExit {
+        DateFragment.OnExitDate {
     private DateFragment dateFragment;
     private DisplayFragment displayFragment;
     private MainFragment mainFragment;
@@ -124,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
         editor.putInt(BIRTH_YEAR, 1900);
         editor.putInt(BIRTH_MONTH, 0);
         editor.putInt(BIRTH_DAY, 1);
+        editor.putString(TEL_1, "");
+        editor.putString(TEL_2, "");
+        editor.putString(TEL_3, "");
 
         editor.apply();
     }
@@ -164,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
     protected void onStop() {
         super.onStop();
     }
-
     @Override
     public void onVal(User user) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -172,10 +176,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
         savePrefs(user);
         transaction.commit();
     }
-
     public void savePrefs(User user){
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        Log.i("savePrefs", "savePrefs");
 
         editor.putString(NOM_KEY, user.getNom());
         editor.putString(PRENOM_KEY, user.getPrenom());
@@ -184,10 +188,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
         editor.putInt(BIRTH_YEAR, user.getBirthYear());
         editor.putInt(BIRTH_MONTH, user.getBirthMonth());
         editor.putInt(BIRTH_DAY, user.getBirthDay());
+        editor.putString(TEL_1, user.getTel_1());
+        editor.putString(TEL_2, user.getTel_2());
+        editor.putString(TEL_3, user.getTel_3());
 
         editor.apply();
-
-        Log.i("ville Sauvegarde", prefs.getString(VILLE_KEY, ""));
+        Snackbar.make(findViewById(R.id.main), "Sauvegarde faite.", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -196,15 +202,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(mainFragment);
 
-        Log.i("dates", String.valueOf(birthDay));
-
         transaction.add(R.id.LLmain, dateFragment, "dateFragment");
         transaction.runOnCommit(() -> dateFragment.dateSet(birthYear, birthMonth, birthDay));
-//        transaction.addToBackStack("");
+//        transaction.addToBackStack("dateFragmentTransaction");
         transaction.commit();
 
     }
-
     @Override
     public void onExit(User user) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
 
         transaction.add(R.id.LLmain, displayFragment, "displayFragment");
         transaction.runOnCommit(() -> displayFragment.setDisplay(user));
-//        transaction.addToBackStack("");
+//        transaction.addToBackStack("displayFragmentTransaction");
         transaction.commit();
     }
     @Override
@@ -224,22 +227,35 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(displayFragment);
 
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Bundle bundle = new Bundle();
+        bundle.putString(PRENOM_KEY, prefs.getString(PRENOM_KEY, ""));
+        bundle.putString(NOM_KEY, prefs.getString(NOM_KEY, ""));
+        bundle.putInt(DEPART_KEY, prefs.getInt(DEPART_KEY, 0));
+        bundle.putString(VILLE_KEY, prefs.getString(VILLE_KEY, ""));
+        bundle.putInt(BIRTH_YEAR, prefs.getInt(BIRTH_YEAR, 1900));
+        bundle.putInt(BIRTH_MONTH, prefs.getInt(BIRTH_MONTH, 0));
+        bundle.putInt(BIRTH_DAY, prefs.getInt(BIRTH_DAY, 1));
+        bundle.putString(TEL_1, prefs.getString(TEL_1, ""));
+        bundle.putString(TEL_2, prefs.getString(TEL_2, ""));
+        bundle.putString(TEL_3, prefs.getString(TEL_3, ""));
+        mainFragment.setArguments(bundle);
+
         transaction.add(R.id.LLmain, mainFragment, "mainFragment");
-//        transaction.addToBackStack("");
+//        transaction.addToBackStack("mainFragmentTransaction");
         transaction.commit();
     }
     @Override
-    public void onExit(int birthYear, int birthMonth, int birthDay) {
+    public void onExitDate(int birthYear, int birthMonth, int birthDay) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(dateFragment);
 
         transaction.add(R.id.LLmain, mainFragment, "mainFragment");
         transaction.runOnCommit(() -> mainFragment.setDate(birthYear, birthMonth, birthDay));
-//        transaction.addToBackStack("");
+//        transaction.addToBackStack("mainFragmentTransaction");
         transaction.commit();
     }
-
     @Override
     public void onSendDate(int birthYear, int birthMonth, int birthDay) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -248,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnVa
 
         transaction.add(R.id.LLmain, mainFragment, "mainFragment");
         transaction.runOnCommit(() -> mainFragment.setDate(birthYear, birthMonth, birthDay));
-//        transaction.addToBackStack("");
+//        transaction.addToBackStack("mainFragmentTransaction");
         transaction.commit();
     }
 }

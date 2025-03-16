@@ -38,8 +38,6 @@ public class MainFragment extends Fragment {
     private String nom;
     private String prenom;
     private String ville;
-    private String tel_2;
-    private String tel_3;
     private final String[] phoneNumbers = new String[3];
     private int depart, birthYear, birthMonth, birthDay;
     private OnVal listener;
@@ -104,8 +102,7 @@ public class MainFragment extends Fragment {
             phoneNumbers[0] = getArguments().getString(TEL_1, "");
             phoneNumbers[1] = getArguments().getString(TEL_2, "");
             phoneNumbers[2] = getArguments().getString(TEL_3, "");
-            tel_2 = getArguments().getString(TEL_2, "");
-            tel_3 = getArguments().getString(TEL_3, "");
+            Log.i("onCreate", prenom);
         }
     }
 
@@ -116,22 +113,24 @@ public class MainFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Log.i("Lifecycle", "onCreate method");
         super.onViewCreated(view, savedInstanceState);
         ETT = view.findViewById(R.id.ETT);
         ETT2 = view.findViewById(R.id.ETT2);
         ETT4 = view.findViewById(R.id.ETT4);
         departSpinner = view.findViewById(R.id.departement);
         TVDate = view.findViewById(R.id.TVDateDisplay);
+        phoneEditTextIds = new ArrayList<>();
+
+        Log.i("onViewCreated", prenom);
 
         ETT.setText(nom);
+
         ETT2.setText(prenom);
-        Log.i("ville Fragment", ville);
         ETT4.setText(ville);
         departSpinner.setSelection(depart);
         String date = birthYear
                 + "-"
-                + birthMonth + 1
+                + String.valueOf(birthMonth + 1)
                 + "-"
                 + birthDay;
         TVDate.setText(date);
@@ -166,8 +165,6 @@ public class MainFragment extends Fragment {
                     phoneEditText.setHint(getString(R.string.preview_phone));
                     phoneEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                     phoneEditText.setInputType(InputType.TYPE_CLASS_PHONE);
-
-                    Log.i("tel", phoneNumbers[childCount]);
                     phoneEditText.setText(phoneNumbers[childCount]);
 
                     phoneEditTextIds.add(phoneEditText);
@@ -199,19 +196,22 @@ public class MainFragment extends Fragment {
                     );
                     deleteButton.setLayoutParams(buttonParams);
                     deleteButton.setText(getString(R.string.delete_phone));
+
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             View parent = (View) v.getParent();
                             if (parent instanceof LinearLayout) {
-                                LinearLayout parentLayout = (LinearLayout) requireView()
-                                        .findViewById(R.id.linearLayoutTel);
-                                Log.i("verif", String.valueOf(parentLayout == null));
+                                LinearLayout parentLayout = requireView().findViewById(R.id.linearLayoutTel);
                                 assert parentLayout != null;
+                                int indexToRemove = parentLayout.indexOfChild(parent);
+
+                                if (indexToRemove >= 0 && indexToRemove < phoneEditTextIds.size()) {
+                                    phoneEditTextIds.remove(indexToRemove);
+                                }
                                 parentLayout.removeView(parent);
                             }
                         }
-
                     });
 
                     newPhoneLayout.addView(phoneEditText);
@@ -228,14 +228,15 @@ public class MainFragment extends Fragment {
         butVal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nom = ETT.getText().toString();
-                String prenom = ETT2.getText().toString();
-                String ville = ETT4.getText().toString();
-                int depart = departSpinner.getSelectedItemPosition();
-                String date = TVDate.getText().toString();
-                int year = Integer.parseInt(date.substring(0, 4));
-                int month = Integer.parseInt(date.substring(5, 6)) - 1;
-                int day = Integer.parseInt(date.substring(7, 9));
+                nom = ETT.getText().toString();
+                prenom = ETT2.getText().toString();
+                ville = ETT4.getText().toString();
+                depart = departSpinner.getSelectedItemPosition();
+
+                for (int i = 0; i < 3; i++) {
+                    phoneNumbers[i] = "";
+                }
+
                 for (int i = 0; i < phoneEditTextIds.size(); i++) {
                     EditText editText = phoneEditTextIds.get(i);
                     if (editText != null) {
@@ -246,8 +247,8 @@ public class MainFragment extends Fragment {
                     }
                 }
 
-                User user = new User(prenom, nom, depart, ville, year, month, day, phoneNumbers[0],
-                        phoneNumbers[1], phoneNumbers[2]);
+                User user = new User(prenom, nom, depart, ville, birthYear, birthMonth, birthDay,
+                        phoneNumbers[0], phoneNumbers[1], phoneNumbers[2]);
 
                 listener.onVal(user);
             }
@@ -256,29 +257,9 @@ public class MainFragment extends Fragment {
         butExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String nom = ETT.getText().toString();
-                String prenom = ETT2.getText().toString();
-                String ville = ETT4.getText().toString();
-                Log.i("ville Listener", ville);
-                int depart = departSpinner.getSelectedItemPosition();
-                String date = TVDate.getText().toString();
-                int year = Integer.parseInt(date.substring(0, 4));
-                int month = Integer.parseInt(date.substring(5, 6)) - 1;
-                int day = Integer.parseInt(date.substring(7, 9));
-                for (int i = 0; i < phoneEditTextIds.size(); i++) {
-                    EditText editText = phoneEditTextIds.get(i);
-                    if (editText != null) {
-                        String str = editText.getText().toString();
-                        if (!str.isEmpty()) {
-                            phoneNumbers[i] = str;
-                        }
-                    }
-                }
-                phoneEditTextIds = new ArrayList<>();
-
-                User user = new User(prenom, nom, depart, ville, year, month, day, phoneNumbers[0],
-                        phoneNumbers[1], phoneNumbers[2]);
-
+                User user = new User(prenom, nom, depart, ville, birthYear, birthMonth, birthDay,
+                        phoneNumbers[0], phoneNumbers[1], phoneNumbers[2]);
+                Log.i("OnExit", user.getPrenom());
                 listenerDisplay.onExit(user);
             }
         });
@@ -293,11 +274,6 @@ public class MainFragment extends Fragment {
         });
 
     }
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState){
-        super.onSaveInstanceState(outState);
-    }
-
     public void setDate(int birthYear_2, int birthMonth_2, int birthDay_2) {
         birthYear = birthYear_2;
         birthMonth = birthMonth_2;
@@ -326,9 +302,7 @@ public class MainFragment extends Fragment {
         bundle.putInt(BIRTH_YEAR, birthYear);
         return bundle;
     }
-
     public void resetAction(MenuItem menu) {
-        Log.i("reset", "reset Fragment");
         ETT2.setText("");
         ETT.setText("");
         ETT4.setText("");
@@ -347,15 +321,12 @@ public class MainFragment extends Fragment {
     public String share(MenuItem menu) {
         return ETT4.getText().toString();
     }
-
     public interface OnDate {
         void onDate(int birthYear, int birthMonth, int birthDay);
     }
-
     public interface OnVal {
         void onVal(User user);
     }
-
     public interface OnExit {
         void onExit(User user);
     }

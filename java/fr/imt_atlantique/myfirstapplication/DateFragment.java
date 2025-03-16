@@ -23,7 +23,7 @@ public class DateFragment extends Fragment {
 
     DatePicker datePicker;
     Button butVal, butExit;
-    private OnExit listenerExit;
+    private OnExitDate listenerExit;
     private OnSendDate listenerDate;
     public int year, month, day;
     private static final String BIRTH_YEAR = "year", BIRTH_MONTH = "month", BIRTH_DAY = "day";
@@ -50,8 +50,8 @@ public class DateFragment extends Fragment {
         if (context instanceof OnSendDate) {
             listenerDate = (OnSendDate) context;
         }
-        if (context instanceof OnExit) {
-            listenerExit = (OnExit) context;
+        if (context instanceof OnExitDate) {
+            listenerExit = (OnExitDate) context;
         }
     }
 
@@ -73,9 +73,8 @@ public class DateFragment extends Fragment {
             int year = datePicker.getYear();
             int month = datePicker.getMonth();
             int day = datePicker.getDayOfMonth();
-            listenerExit.onExit(year, month, day);
+            listenerExit.onExitDate(year, month, day);
         });
-
     }
 
     public void dateSet(int birthYear, int birthMonth, int birthDay) {
@@ -97,7 +96,7 @@ public class DateFragment extends Fragment {
     interface OnSendDate{
         void onSendDate(int birthYear, int birthMonth, int birthDay);
     }
-    interface OnExit{
-        void onExit(int birthYear, int birthMonth, int birthDay);
+    interface OnExitDate{
+        void onExitDate(int birthYear, int birthMonth, int birthDay);
     }
 }

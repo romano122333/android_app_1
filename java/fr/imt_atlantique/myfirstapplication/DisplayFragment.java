@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,6 @@ import android.widget.TextView;
  * A simple {@link Fragment} subclass.
  */
 public class DisplayFragment extends Fragment {
-
     EditText editTextNom, editTextPrenom, editTextVille, editTextTel1, editTextTel2, editTextTel3;
     Spinner spinnerDepart;
     Button butValidate;
@@ -29,29 +29,24 @@ public class DisplayFragment extends Fragment {
             DEPART_KEY = "depart", TEL_1 = "tel_1",
             TEL_2 = "tel_2", TEL_3 = "tel_3";
     private OnEdit listener;
-
     public DisplayFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      */
     // TODO: Rename and change types and number of parameters
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_display, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
@@ -74,7 +69,6 @@ public class DisplayFragment extends Fragment {
         });
 
     }
-
     public void onAttach(@NonNull Context context){
         super.onAttach(context);
         getActivity();
@@ -82,7 +76,6 @@ public class DisplayFragment extends Fragment {
             listener = (OnEdit) context;
         }
     }
-
     public void setDisplay(User user) {
         usr = user;
         editTextNom.setText(user.getNom());
@@ -94,12 +87,11 @@ public class DisplayFragment extends Fragment {
         editTextTel3.setText(user.getTel_3());
         String date = user.getBirthYear()
                 + "-"
-                + user.getBirthMonth()
+                + String.valueOf(user.getBirthMonth() + 1)
                 + "-"
                 + user.getBirthDay();
         textViewDateNaiss.setText(date);
     }
-
     public Bundle getInfo() {
         Bundle bundle = new Bundle();
         bundle.putString(PRENOM_KEY, usr.getPrenom());
@@ -114,7 +106,6 @@ public class DisplayFragment extends Fragment {
         bundle.putString(TEL_3, usr.getTel_3());
         return bundle;
     }
-
     interface OnEdit{
         void onEdit();
     }
